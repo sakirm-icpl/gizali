@@ -1,0 +1,22 @@
+pipeline {
+  agent { any }
+ 
+  parameters {
+    string(defaultValue: 'http://localhost:8000', description: 'The URL of your MobSF server', name: 'mobsf_url')
+    string(defaultValue: '4fa8dd5c914e302f35a4620781f9f0bbdb97aa021f4523ed5b1c0449b7fc0ed1', description: 'The API key for your MobSF server', name: 'mobsf_api_key')
+    string(defaultValue: '/home/icpl/apk/', description: 'The path to the directory containing the mobile applications that you want to scan', name: 'mobile_applications_directory')
+  }
+ 
+  stages {
+    stage('Scan') {
+      steps {
+        mobsfScan(
+          mobsfUrl: params.mobsf_url,
+          apiKey: params.mobsf_api_key,
+          appFiles: findFiles(glob: "${params.mobile_applications_directory}/*.apk")
+        )
+      }
+    }
+  }
+}
+has context menu
